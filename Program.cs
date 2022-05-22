@@ -27,6 +27,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Cars}/{action=Index}/{id?}");
+    pattern: "{controller=Teams}/{action=Index}/{id?}");
 
 app.Run();
