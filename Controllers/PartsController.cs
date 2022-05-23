@@ -26,12 +26,12 @@ namespace Labka1.Controllers
             //ViewBag.CarId = id;
             ViewBag.CarBrand = brand;
             ViewBag.CarModel = model;
-            var partsByCar = _context.Parts.Include(p => p.Car).Where(p => p.Id == carId);
+            var partsByCar = _context.Parts.Include(p => p.Car).Where(p => p.Car.Id == carId);
             ViewData["currentCarId"]=carId;
             List<Part> result = await partsByCar.ToListAsync();
             return View(result);
         }
-
+        
         // GET: Parts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
