@@ -1,23 +1,30 @@
 ﻿@model IEnumerable<Labka1.Models.Sponsor>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Sponsors";
 }
 
-<h1>Index</h1>
+<h1>Sponsors of @ViewBag.TeamName</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @*<a asp-action="Create">Get new sponsor</a>*@
+    @Html.ActionLink("Get new sponsor", "Create", "Sponsors",routeValues: new{teamId = @ViewBag.currentTeamId})
 </p>
+
+@*<p>
+    <a asp-action="Create">Get new sponsor</a>
+    @Html.ActionLink("Back to list", "DeleteConfirmed", "Sponsors",routeValues: new{teamId = @ViewBag.currentTeamId})
+</p>*@
+
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Team)
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -27,12 +34,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+          @*<td>
                 @Html.DisplayFor(modelItem => item.Team.Id)
-            </td>
+            </td>*@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

@@ -19,10 +19,17 @@ namespace Labka1.Controllers
         }
 
         // GET: Sponsors
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? teamId, string name)
         {
-            var racingContext = _context.Sponsors.Include(s => s.Team);
-            return View(await racingContext.ToListAsync());
+            //var racingContext = _context.Sponsors.Include(s => s.Team);
+            //return View(await racingContext.ToListAsync());
+            if (teamId == null) return RedirectToAction("Cars", "Index");
+
+            ViewBag.TeamName = name;
+            var sponsorsByTeam = _context.Sponsors.Include(p => p.Team).Where(p => p.Team.Id == teamId);
+            ViewData["currentTeamId"] = teamId;
+            List<Sponsor> result = await sponsorsByTeam.ToListAsync();
+            return View(result);
         }
 
         // GET: Sponsors/Details/5
@@ -45,9 +52,10 @@ namespace Labka1.Controllers
         }
 
         // GET: Sponsors/Create
-        public IActionResult Create()
+        public IActionResult Create(int teamId)
         {
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id");
+            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id");
+            ViewData["currentTeam"] = _context.Teams.FirstOrDefault(c => c.Id == teamId);
             return View();
         }
 
@@ -62,9 +70,10 @@ namespace Labka1.Controllers
             {
                 _context.Add(sponsor);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Sponsors", routeValues: new { teamId = sponsor.TeamId });
             }
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", sponsor.TeamId);
+            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", sponsor.TeamId);
+            ViewData["currentTeam"] = _context.Teams.FirstOrDefault(c => c.Id == sponsor.TeamId);
             return View(sponsor);
         }
 
@@ -156,9 +165,9 @@ namespace Labka1.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index),"Sponsors", new { teamId = sponsor.TeamId});
         }
-
+        
         private bool SponsorExists(int id)
         {
           return (_context.Sponsors?.Any(e => e.Id == id)).GetValueOrDefault();

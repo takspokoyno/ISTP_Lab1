@@ -42,7 +42,7 @@ namespace Labka1.Controllers
             }
 
             //return View(car);
-            return RedirectToAction("Index", "Parts", new { id = car.Id , brand = car.Brand, model=car.Model}); 
+            return RedirectToAction("Index", "Parts", new { carId = car.Id , brand = car.Brand, model=car.Model}); 
         }
 
         // GET: Cars/Create

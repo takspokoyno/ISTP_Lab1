@@ -9,88 +9,90 @@ using Labka1.Models;
 
 namespace Labka1.Controllers
 {
-    public class TeamsController : Controller
+    public class RacersController : Controller
     {
         private readonly RacingContext _context;
 
-        public TeamsController(RacingContext context)
+        public RacersController(RacingContext context)
         {
             _context = context;
         }
 
-        // GET: Teams
+        // GET: Racers
         public async Task<IActionResult> Index()
         {
-              return _context.Teams != null ? 
-                          View(await _context.Teams.ToListAsync()) :
-                          Problem("Entity set 'RacingContext.Teams'  is null.");
+            var racingContext = _context.Racers.Include(r => r.Team);
+            return View(await racingContext.ToListAsync());
         }
 
-        // GET: Teams/Details/5
+        // GET: Racers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Teams == null)
+            if (id == null || _context.Racers == null)
             {
                 return NotFound();
             }
 
-            var team = await _context.Teams
+            var racer = await _context.Racers
+                .Include(r => r.Team)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (team == null)
+            if (racer == null)
             {
                 return NotFound();
             }
 
-            return RedirectToAction("Index", "Sponsors", new { teamId = team.Id, name = team.Name});
-            //return View(team);
+            return View(racer);
         }
 
-        // GET: Teams/Create
+        // GET: Racers/Create
         public IActionResult Create()
         {
+            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id");
             return View();
         }
 
-        // POST: Teams/Create
+        // POST: Racers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Team team)
+        public async Task<IActionResult> Create([Bind("Id,Name,Sex,BirthDate,TeamId")] Racer racer)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(team);
+                _context.Add(racer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(team);
+            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", racer.TeamId);
+            return View(racer);
         }
 
-        // GET: Teams/Edit/5
+        // GET: Racers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Teams == null)
+            if (id == null || _context.Racers == null)
             {
                 return NotFound();
             }
 
-            var team = await _context.Teams.FindAsync(id);
-            if (team == null)
+            var racer = await _context.Racers.FindAsync(id);
+            if (racer == null)
             {
                 return NotFound();
             }
-            return View(team);
+            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", racer.TeamId);
+            return View(racer);
         }
 
-        // POST: Teams/Edit/5
+        // POST: Racers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Team team)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Sex,BirthDate,TeamId")] Racer racer)
         {
-            if (id != team.Id)
+            if (id != racer.Id)
             {
                 return NotFound();
             }
@@ -99,12 +101,12 @@ namespace Labka1.Controllers
             {
                 try
                 {
-                    _context.Update(team);
+                    _context.Update(racer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TeamExists(team.Id))
+                    if (!RacerExists(racer.Id))
                     {
                         return NotFound();
                     }
@@ -115,49 +117,51 @@ namespace Labka1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(team);
+            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", racer.TeamId);
+            return View(racer);
         }
 
-        // GET: Teams/Delete/5
+        // GET: Racers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Teams == null)
+            if (id == null || _context.Racers == null)
             {
                 return NotFound();
             }
 
-            var team = await _context.Teams
+            var racer = await _context.Racers
+                .Include(r => r.Team)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (team == null)
+            if (racer == null)
             {
                 return NotFound();
             }
 
-            return View(team);
+            return View(racer);
         }
 
-        // POST: Teams/Delete/5
+        // POST: Racers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Teams == null)
+            if (_context.Racers == null)
             {
-                return Problem("Entity set 'RacingContext.Teams'  is null.");
+                return Problem("Entity set 'RacingContext.Racers'  is null.");
             }
-            var team = await _context.Teams.FindAsync(id);
-            if (team != null)
+            var racer = await _context.Racers.FindAsync(id);
+            if (racer != null)
             {
-                _context.Teams.Remove(team);
+                _context.Racers.Remove(racer);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TeamExists(int id)
+        private bool RacerExists(int id)
         {
-          return (_context.Teams?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Racers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -1,22 +1,22 @@
-﻿@model IEnumerable<Labka1.Models.Tournament>
+﻿@model IEnumerable<Labka1.Models.Participation>
 
 @{
-    ViewData["Title"] = "Tournaments";
+    ViewData["Title"] = "Index";
 }
 
-<h1>Tournaments</h1>
+<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Found a new one</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Racer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Reward)
+                @Html.DisplayNameFor(model => model.Tournament)
             </th>
             <th></th>
         </tr>
@@ -25,10 +25,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.Racer.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Reward)
+                @Html.DisplayFor(modelItem => item.Tournament.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

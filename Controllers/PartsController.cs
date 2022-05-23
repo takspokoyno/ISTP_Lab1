@@ -19,16 +19,17 @@ namespace Labka1.Controllers
         }
 
         // GET: Parts
-        public async Task<IActionResult> Index(int? id, string? brand, string? model)
+        public async Task<IActionResult> Index(int? carId, string model, string brand)
         {
-            if (id == null) return RedirectToAction("Cars", "Index");
+            if (carId == null) return RedirectToAction("Cars", "Index");
 
-            ViewBag.CarId = id;
+            //ViewBag.CarId = id;
             ViewBag.CarBrand = brand;
             ViewBag.CarModel = model;
-            var partsByCar = _context.Parts.Where(p => p.CarId == id).Include(p => p.Car);
-
-            return View(await partsByCar.ToListAsync());
+            var partsByCar = _context.Parts.Include(p => p.Car).Where(p => p.Id == carId);
+            ViewData["currentCarId"]=carId;
+            List<Part> result = await partsByCar.ToListAsync();
+            return View(result);
         }
 
         // GET: Parts/Details/5
@@ -53,7 +54,8 @@ namespace Labka1.Controllers
         // GET: Parts/Create
         public IActionResult Create(int carId)
         {
-            ViewData["CarId"] = _context.Cars.FirstOrDefault(c => c.Id == carId);
+            ViewData["currentCar"] = _context.Cars.FirstOrDefault(c => c.Id == carId);
+
             //ViewBag.CarId = carId;
             //ViewBag.CarBrand = _context.Cars.Where(c => c.Id == carId).FirstOrDefault().Brand;
             return View();
@@ -64,19 +66,19 @@ namespace Labka1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int carId, [Bind("Id,Name")] Part part)
+        public async Task<IActionResult> Create([Bind("Id,Name,CarId")] Part part)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(part);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
-                return RedirectToAction("Index", "Parts", new { id = carId, brand = _context.Cars.Where(c=>c.Id==carId).FirstOrDefault().Brand });
+                return RedirectToAction(nameof(Index), "Parts", routeValues: new {carId=part.CarId});
+                //return RedirectToAction("Index", "Parts", new { id = carId, brand = _context.Cars.Where(c=>c.Id==carId).FirstOrDefault().Brand });
             }
-            ViewData["CarId"] = _context.Cars.FirstOrDefault(c => c.Id == part.CarId);
+            ViewData["currentCar"] = _context.Cars.FirstOrDefault(c => c.Id == part.CarId);
             //ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Brand", part.CarId);
-            //return View(part);
-            return RedirectToAction("Index", "Parts", new { id = carId, brand = _context.Cars.Where(c => c.Id == carId).FirstOrDefault().Brand });
+            return View(part);
+            //return RedirectToAction("Index", "Parts", new { id = carId, brand = _context.Cars.Where(c => c.Id == carId).FirstOrDefault().Brand });
         }
 
         // GET: Parts/Edit/5
@@ -147,7 +149,7 @@ namespace Labka1.Controllers
             {
                 return NotFound();
             }
-
+  
             return View(part);
         }
 
@@ -167,7 +169,7 @@ namespace Labka1.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), "Parts", routeValues: new { carId = part.CarId });
         }
 
         private bool PartExists(int id)

@@ -9,6 +9,6 @@ namespace Labka1.Models
         public string Name { get; set; } = null!;
         public int TeamId { get; set; }
 
-        public virtual Team Team { get; set; } = null!;
+        public virtual Team? Team { get; set; } = null!;
     }
 }
