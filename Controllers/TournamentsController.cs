@@ -41,7 +41,8 @@ namespace Labka1.Controllers
                 return NotFound();
             }
 
-            return View(tournament);
+            return RedirectToAction("Index", "Participations", routeValues: new { tournamentId = tournament.Id, tournamentName = tournament.Name });
+            //return View(tournament);
         }
 
         // GET: Tournaments/Create

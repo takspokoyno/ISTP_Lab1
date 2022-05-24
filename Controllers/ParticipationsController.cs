@@ -19,9 +19,15 @@ namespace Labka1.Controllers
         }
 
         // GET: Participations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int tournamentId, string tournamentName)
         {
-            var racingContext = _context.Participations.Include(p => p.Racer).Include(p => p.Tournament);
+            ViewBag.TournamentName = tournamentName;
+/*            var Racer = _context.Racers.Select(r=>r);
+            var Team = from team in _context.Teams
+                       join r in Racer on team.Id equals r.TeamId
+                       select new { Id = r.Id, Name = team.Name };
+            ViewData["RacerTeam"] = new SelectList(Team, "Id", "Name" );*/
+            var racingContext = _context.Participations.Include(p => p.Racer).Include(p => p.Tournament).Where(p=>p.TournamentId == tournamentId);
             return View(await racingContext.ToListAsync());
         }
 

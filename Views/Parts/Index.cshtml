@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Labka1.Models.Part>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Запчастини";
 }
 
-<h1>Parts of @ViewBag.CarBrand @ViewBag.CarModel</h1>
+<h1>Запчастини @ViewBag.CarBrand @ViewBag.CarModel</h1>
 
 <p>
-    @Html.ActionLink("Add new part", "Create", "Parts",routeValues: new{carId = @ViewBag.currentCarId})
+    @Html.ActionLink("Додати нову запчастину", "Create", "Parts",routeValues: new{carId = @ViewBag.currentCarId})
 
 </p>
 <table class="table">
@@ -26,9 +26,9 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
                @* <a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
             </td>
         </tr>
 }

@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Labka1.Models.Participation>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Участь";
 }
 
-<h1>Index</h1>
+<h1>Учасники турніру @ViewBag.TournamentName</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create"></a>
 </p>
 <table class="table">
     <thead>
@@ -16,7 +16,10 @@
                 @Html.DisplayNameFor(model => model.Racer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tournament)
+                @Html.DisplayNameFor(model => model.Racer.Sex)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Racer.BirthDate)
             </th>
             <th></th>
         </tr>
@@ -25,15 +28,18 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Racer.Id)
+                @Html.DisplayFor(modelItem => item.Racer.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tournament.Id)
+                @Html.DisplayFor(modelItem => item.Racer.Sex)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.Racer.BirthDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Деталі</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
             </td>
         </tr>
 }

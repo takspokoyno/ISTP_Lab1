@@ -12,7 +12,7 @@ namespace Labka1.Controllers
     public class PartsController : Controller
     {
         private readonly RacingContext _context;
-
+        
         public PartsController(RacingContext context)
         {
             _context = context;
@@ -26,7 +26,7 @@ namespace Labka1.Controllers
             //ViewBag.CarId = id;
             ViewBag.CarBrand = brand;
             ViewBag.CarModel = model;
-            var partsByCar = _context.Parts.Include(p => p.Car).Where(p => p.Car.Id == carId);
+            var partsByCar = _context.Parts.Where(p => p.CarId == carId); //Include(p => p.Car).
             ViewData["currentCarId"]=carId;
             List<Part> result = await partsByCar.ToListAsync();
             return View(result);

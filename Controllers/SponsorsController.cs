@@ -131,7 +131,7 @@ namespace Labka1.Controllers
         }
 
         // GET: Sponsors/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Sponsors == null)
             {

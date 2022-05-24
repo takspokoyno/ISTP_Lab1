@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Labka1.Models
 {
@@ -11,7 +12,9 @@ namespace Labka1.Models
         }
 
         public int Id { get; set; }
+        [Display(Name = "Назва")]
         public string Name { get; set; } = null!;
+        [Display(Name = "Винагорода")]
         public decimal? Reward { get; set; }
 
         public virtual ICollection<Participation> Participations { get; set; }
