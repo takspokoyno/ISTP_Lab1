@@ -55,9 +55,8 @@ namespace Labka1.Controllers
         public IActionResult Create(int carId)
         {
             ViewData["currentCar"] = _context.Cars.FirstOrDefault(c => c.Id == carId);
-
-            //ViewBag.CarId = carId;
-            //ViewBag.CarBrand = _context.Cars.Where(c => c.Id == carId).FirstOrDefault().Brand;
+            ViewBag.CarBrand = _context.Cars.Where(c => c.Id == carId).FirstOrDefault().Brand;
+            ViewBag.CarModel = _context.Cars.Where(c => c.Id == carId).FirstOrDefault().Model;
             return View();
         }
 
@@ -72,7 +71,7 @@ namespace Labka1.Controllers
             {
                 _context.Add(part);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), "Parts", routeValues: new {carId=part.CarId});
+                return RedirectToAction(nameof(Index), "Parts", routeValues: new {carId=part.CarId, _context.Cars.Where(c => c.Id == part.CarId).FirstOrDefault().Brand, _context.Cars.Where(c => c.Id == part.CarId).FirstOrDefault().Model });
                 //return RedirectToAction("Index", "Parts", new { id = carId, brand = _context.Cars.Where(c=>c.Id==carId).FirstOrDefault().Brand });
             }
             ViewData["currentCar"] = _context.Cars.FirstOrDefault(c => c.Id == part.CarId);
@@ -94,7 +93,10 @@ namespace Labka1.Controllers
             {
                 return NotFound();
             }
-            ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Brand", part.CarId);
+            //ViewBag.CarBrand = _context.Cars.Where(c => c.Id == id).FirstOrDefault().Brand;
+            //ViewBag.CarModel = _context.Cars.Where(c => c.Id == id).FirstOrDefault().Model;
+            //ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Brand", part.CarId);
+            ViewData["currentCar"] = _context.Cars.FirstOrDefault(c => c.Id == part.CarId);
             return View(part);
         }
 
@@ -128,9 +130,9 @@ namespace Labka1.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Parts", routeValues: new { carId = part.CarId, _context.Cars.Where(c => c.Id == part.CarId).FirstOrDefault().Brand, _context.Cars.Where(c => c.Id == part.CarId).FirstOrDefault().Model });
             }
-            ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Brand", part.CarId);
+            ViewData["currentCar"] = _context.Cars.FirstOrDefault(c => c.Id == part.CarId);
             return View(part);
         }
 
@@ -149,7 +151,7 @@ namespace Labka1.Controllers
             {
                 return NotFound();
             }
-  
+            ViewData["currentCar"] = _context.Cars.FirstOrDefault(c => c.Id == part.CarId);
             return View(part);
         }
 
@@ -169,7 +171,8 @@ namespace Labka1.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), "Parts", routeValues: new { carId = part.CarId });
+            ViewData["currentCar"] = _context.Cars.FirstOrDefault(c => c.Id == part.CarId);
+            return RedirectToAction(nameof(Index), "Parts", routeValues: new { carId = part.CarId, _context.Cars.Where(c => c.Id == part.CarId).FirstOrDefault().Brand, _context.Cars.Where(c => c.Id == part.CarId).FirstOrDefault().Model });
         }
 
         private bool PartExists(int id)

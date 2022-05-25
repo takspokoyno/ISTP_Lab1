@@ -48,7 +48,7 @@ namespace Labka1.Controllers
         // GET: Cars/Create
         public IActionResult Create()
         {
-            ViewData["OwnerId"] = new SelectList(_context.Racers, "Id", "Id");
+            ViewData["Owner"] = new SelectList(_context.Racers, "Id", "Name");
             return View();
         }
 
@@ -63,9 +63,9 @@ namespace Labka1.Controllers
             {
                 _context.Add(car);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index),"Details",routeValues: new {carId=car.Id});
+                return RedirectToAction(nameof(Index),"Cars");
             }
-            ViewData["OwnerId"] = new SelectList(_context.Racers, "Id", "Id", car.OwnerId);
+            ViewData["Owner"] = new SelectList(_context.Racers, "Id", "Name", car.OwnerId);
             return View(car);
         }
 
@@ -82,7 +82,7 @@ namespace Labka1.Controllers
             {
                 return NotFound();
             }
-            ViewData["OwnerId"] = new SelectList(_context.Racers, "Id", "Id", car.OwnerId);
+            ViewData["Owner"] = new SelectList(_context.Racers, "Id", "Name", car.OwnerId);
             return View(car);
         }
 
@@ -118,7 +118,7 @@ namespace Labka1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OwnerId"] = new SelectList(_context.Racers, "Id", "Id", car.OwnerId);
+            ViewData["Owner"] = new SelectList(_context.Racers, "Id", "Name", car.OwnerId);
             return View(car);
         }
 

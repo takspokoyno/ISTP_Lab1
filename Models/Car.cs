@@ -12,18 +12,22 @@ namespace Labka1.Models
         }
 
         public int Id { get; set; }
-        [Required(ErrorMessage = "Field cannot be empty")]
+        [Required(ErrorMessage = "Поле не може бути пустим")]
         [Display(Name = "Марка")]
-        public string Brand { get; set; } = null!;
+        public string? Brand { get; set; } = null!;
+        [Required(ErrorMessage = "Поле не може бути пустим")]
         [Display(Name = "Модель")]
-        public string Model { get; set; } = null!;
+        public string? Model { get; set; } = null!;
+        [Required(ErrorMessage = "Поле не може бути пустим")]
         [Display(Name = "Вартість")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
+        [Required(ErrorMessage = "Поле не може бути пустим")]
         [Display(Name = "Рік випуску")]
-        public int Year { get; set; }
-        public int OwnerId { get; set; }
+        public int? Year { get; set; }
         [Display(Name = "Власник")]
-        public virtual Racer Owner { get; set; } = null!;
-        public virtual ICollection<Part> Parts { get; set; }
+        public int? OwnerId { get; set; }
+        [Display(Name = "Власник")]
+        public virtual Racer? Owner { get; set; } = null!;
+        public virtual ICollection<Part>? Parts { get; set; }
     }
 }

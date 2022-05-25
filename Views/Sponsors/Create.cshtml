@@ -25,14 +25,14 @@
                 <input type="hidden" asp-for="TeamId" value="@ViewBag.currentTeam.Id" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Створити" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Назад</a>
+    @Html.ActionLink("Назад", "Index", "Sponsors",routeValues: new{teamId = @ViewBag.currentTeam.Id, name = @ViewBag.TeamName})
 </div>
 
 @section Scripts {

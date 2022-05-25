@@ -52,9 +52,9 @@ namespace Labka1.Controllers
         }
 
         // GET: Sponsors/Create
-        public IActionResult Create(int teamId)
+        public IActionResult Create(int teamId) 
         {
-            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id");
+            ViewBag.TeamName = _context.Teams.Where(c => c.Id == teamId).FirstOrDefault().Name;
             ViewData["currentTeam"] = _context.Teams.FirstOrDefault(c => c.Id == teamId);
             return View();
         }
@@ -70,9 +70,10 @@ namespace Labka1.Controllers
             {
                 _context.Add(sponsor);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), "Sponsors", routeValues: new { teamId = sponsor.TeamId });
+                return RedirectToAction(nameof(Index), "Sponsors", routeValues: new { teamId = sponsor.TeamId, _context.Teams.Where(c => c.Id == sponsor.TeamId).FirstOrDefault().Name});
             }
-            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", sponsor.TeamId);
+            //ViewData["TeamName"] = _context.Teams.FirstOrDefault(c => c.Name == sponsor.Team.Name);
+            ViewData["TeamName"] = new SelectList(_context.Teams, "Id", "Name", sponsor.TeamId);
             ViewData["currentTeam"] = _context.Teams.FirstOrDefault(c => c.Id == sponsor.TeamId);
             return View(sponsor);
         }
@@ -90,7 +91,8 @@ namespace Labka1.Controllers
             {
                 return NotFound();
             }
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", sponsor.TeamId);
+            ViewBag.TeamName = _context.Teams.Where(c => c.Id == id).FirstOrDefault().Name;
+            ViewData["currentTeam"] = _context.Teams.FirstOrDefault(c => c.Id == sponsor.TeamId);
             return View(sponsor);
         }
 
@@ -124,9 +126,9 @@ namespace Labka1.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Sponsors", routeValues: new { teamId = sponsor.TeamId, _context.Teams.Where(c => c.Id == sponsor.TeamId).FirstOrDefault().Name });
             }
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", sponsor.TeamId);
+            ViewData["currentTeam"] = _context.Teams.FirstOrDefault(c => c.Id == sponsor.TeamId);
             return View(sponsor);
         }
 
@@ -145,7 +147,7 @@ namespace Labka1.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["currentTeam"] = _context.Teams.FirstOrDefault(c => c.Id == sponsor.TeamId);
             return View(sponsor);
         }
         
@@ -165,7 +167,7 @@ namespace Labka1.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index),"Sponsors", new { teamId = sponsor.TeamId});
+            return RedirectToAction(nameof(Index), "Sponsors", routeValues: new { teamId = sponsor.TeamId, _context.Teams.Where(c => c.Id == sponsor.TeamId).FirstOrDefault().Name });
         }
         
         private bool SponsorExists(int id)
