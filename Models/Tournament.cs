@@ -12,8 +12,10 @@ namespace Labka1.Models
         }
 
         public int Id { get; set; }
+        [Required(ErrorMessage = "Поле не може бути пустим")]
         [Display(Name = "Назва")]
         public string Name { get; set; } = null!;
+        [Required(ErrorMessage = "Поле не може бути пустим")]
         [Display(Name = "Винагорода")]
         public decimal? Reward { get; set; }
 

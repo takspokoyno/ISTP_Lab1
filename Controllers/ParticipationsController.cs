@@ -19,16 +19,15 @@ namespace Labka1.Controllers
         }
 
         // GET: Participations
-        public async Task<IActionResult> Index(int tournamentId, string tournamentName)
+        public async Task<IActionResult> Index(int? tournamentId, string tournamentName)
         {
+
             ViewBag.TournamentName = tournamentName;
-/*            var Racer = _context.Racers.Select(r=>r);
-            var Team = from team in _context.Teams
-                       join r in Racer on team.Id equals r.TeamId
-                       select new { Id = r.Id, Name = team.Name };
-            ViewData["RacerTeam"] = new SelectList(Team, "Id", "Name" );*/
+            //ViewBag.TournamentId = tournamentId;
+            ViewData["currentTournamentId"] = tournamentId;
             var racingContext = _context.Participations.Include(p => p.Racer).Include(p => p.Tournament).Where(p=>p.TournamentId == tournamentId);
-            return View(await racingContext.ToListAsync());
+            List<Participation> result = await racingContext.ToListAsync();
+            return View(result);
         }
 
         // GET: Participations/Details/5
@@ -52,10 +51,12 @@ namespace Labka1.Controllers
         }
 
         // GET: Participations/Create
-        public IActionResult Create()
+        public IActionResult Create(int tournamentId)
         {
-            ViewData["RacerId"] = new SelectList(_context.Racers, "Id", "Id");
-            ViewData["TournamentId"] = new SelectList(_context.Tournaments, "Id", "Id");
+            ViewBag.TournamentName = _context.Tournaments.Where(c => c.Id == tournamentId).FirstOrDefault().Name;
+            ViewData["currentTournament"] = _context.Tournaments.FirstOrDefault(c => c.Id == tournamentId);
+            ViewData["RacerId"] = new SelectList(_context.Racers, "Id", "Name");
+            //ViewData["currentTournamentId"] = _context.Tournaments.Where(c => c.Id == tournamentId).FirstOrDefault().Id;//new SelectList(_context.Tournaments, "Id", "Name");
             return View();
         }
 
@@ -70,10 +71,12 @@ namespace Labka1.Controllers
             {
                 _context.Add(participation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Participations", routeValues: new {tournamentId=participation.TournamentId, _context.Tournaments.Where(c => c.Id == participation.TournamentId).FirstOrDefault().Name});
             }
-            ViewData["RacerId"] = new SelectList(_context.Racers, "Id", "Id", participation.RacerId);
-            ViewData["TournamentId"] = new SelectList(_context.Tournaments, "Id", "Id", participation.TournamentId);
+            ViewData["currentTournament"] = _context.Tournaments.FirstOrDefault(c => c.Id == participation.TournamentId);
+            ViewData["TournamentName"] = new SelectList(_context.Teams, "Id", "Name", participation.TournamentId);
+            //ViewData["RacerId"] = new SelectList(_context.Racers, "Id", "Name", participation.RacerId);
+            //ViewData["TournamentId"] = _context.Tournaments.Where(c => c.Id == participation.TournamentId).FirstOrDefault().Id;//new SelectList(_context.Tournaments, "Id", "Name", participation.TournamentId);
             return View(participation);
         }
 
@@ -90,6 +93,7 @@ namespace Labka1.Controllers
             {
                 return NotFound();
             }
+            ViewData["currentTournament"] = _context.Tournaments.FirstOrDefault(c => c.Id == participation.TournamentId);
             ViewData["RacerId"] = new SelectList(_context.Racers, "Id", "Id", participation.RacerId);
             ViewData["TournamentId"] = new SelectList(_context.Tournaments, "Id", "Id", participation.TournamentId);
             return View(participation);
@@ -127,6 +131,7 @@ namespace Labka1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["currentTournament"] = _context.Tournaments.FirstOrDefault(c => c.Id == participation.TournamentId);
             ViewData["RacerId"] = new SelectList(_context.Racers, "Id", "Id", participation.RacerId);
             ViewData["TournamentId"] = new SelectList(_context.Tournaments, "Id", "Id", participation.TournamentId);
             return View(participation);
@@ -148,7 +153,7 @@ namespace Labka1.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["currentTournament"] = _context.Tournaments.FirstOrDefault(c => c.Id == participation.TournamentId);
             return View(participation);
         }
 
@@ -166,9 +171,9 @@ namespace Labka1.Controllers
             {
                 _context.Participations.Remove(participation);
             }
-            
+            ViewData["currentTournament"] = _context.Tournaments.FirstOrDefault(c => c.Id == participation.TournamentId);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), "Participations", routeValues: new {tournamentId=participation.TournamentId, _context.Tournaments.Where(c => c.Id == participation.TournamentId).FirstOrDefault().Name });
         }
 
         private bool ParticipationExists(int id)

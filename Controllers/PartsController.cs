@@ -26,7 +26,7 @@ namespace Labka1.Controllers
             //ViewBag.CarId = id;
             ViewBag.CarBrand = brand;
             ViewBag.CarModel = model;
-            var partsByCar = _context.Parts.Where(p => p.CarId == carId); //Include(p => p.Car).
+            var partsByCar = _context.Parts.Where(p => p.CarId == carId); 
             ViewData["currentCarId"]=carId;
             List<Part> result = await partsByCar.ToListAsync();
             return View(result);
@@ -72,12 +72,9 @@ namespace Labka1.Controllers
                 _context.Add(part);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), "Parts", routeValues: new {carId=part.CarId, _context.Cars.Where(c => c.Id == part.CarId).FirstOrDefault().Brand, _context.Cars.Where(c => c.Id == part.CarId).FirstOrDefault().Model });
-                //return RedirectToAction("Index", "Parts", new { id = carId, brand = _context.Cars.Where(c=>c.Id==carId).FirstOrDefault().Brand });
             }
             ViewData["currentCar"] = _context.Cars.FirstOrDefault(c => c.Id == part.CarId);
-            //ViewData["CarId"] = new SelectList(_context.Cars, "Id", "Brand", part.CarId);
             return View(part);
-            //return RedirectToAction("Index", "Parts", new { id = carId, brand = _context.Cars.Where(c => c.Id == carId).FirstOrDefault().Brand });
         }
 
         // GET: Parts/Edit/5

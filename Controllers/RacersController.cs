@@ -47,7 +47,7 @@ namespace Labka1.Controllers
         // GET: Racers/Create
         public IActionResult Create()
         {
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id");
+            ViewData["TeamName"] = new SelectList(_context.Teams, "Id", "Name");
             return View();
         }
 
@@ -62,9 +62,9 @@ namespace Labka1.Controllers
             {
                 _context.Add(racer);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Tournaments");
             }
-            ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Id", racer.TeamId);
+            ViewData["TeamName"] = new SelectList(_context.Teams, "Id", "Name", racer.TeamId);
             return View(racer);
         }
 

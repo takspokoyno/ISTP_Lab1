@@ -7,7 +7,7 @@
 <h1>Учасники турніру @ViewBag.TournamentName</h1>
 
 <p>
-    <a asp-action="Create">Зарєструвати</a>
+    @Html.ActionLink("Зареєструвати", "Create", "Participations",routeValues: new{tournamentId = @ViewBag.currentTournamentId})
 </p>
 <table class="table">
     <thead>
@@ -37,8 +37,6 @@
                 @Html.DisplayFor(modelItem => item.Racer.BirthDate)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Редагувати</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Деталі</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Видалити</a>
             </td>
         </tr>
