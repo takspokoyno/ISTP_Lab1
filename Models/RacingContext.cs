@@ -50,7 +50,7 @@ namespace Labka1.Models
                 entity.HasOne(d => d.Owner)
                     .WithMany(p => p.Cars)
                     .HasForeignKey(d => d.OwnerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Car_Racer");
             });
 
@@ -63,7 +63,7 @@ namespace Labka1.Models
                 entity.HasOne(d => d.Car)
                     .WithMany(p => p.Parts)
                     .HasForeignKey(d => d.CarId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Parts_Car");
             });
 
@@ -78,13 +78,13 @@ namespace Labka1.Models
                 entity.HasOne(d => d.Racer)
                     .WithMany(p => p.Participations)
                     .HasForeignKey(d => d.RacerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Participation_Racer");
 
                 entity.HasOne(d => d.Tournament)
                     .WithMany(p => p.Participations)
                     .HasForeignKey(d => d.TournamentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Participation_Tournament");
             });
 
@@ -108,7 +108,7 @@ namespace Labka1.Models
                 entity.HasOne(d => d.Team)
                     .WithMany(p => p.Racers)
                     .HasForeignKey(d => d.TeamId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Racer_Team");
             });
 
@@ -123,7 +123,7 @@ namespace Labka1.Models
                 entity.HasOne(d => d.Team)
                     .WithMany(p => p.Sponsors)
                     .HasForeignKey(d => d.TeamId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Sponsor_Team");
             });
 
